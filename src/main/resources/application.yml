@@ -7,3 +7,6 @@ spring:
         format_sql: true
   #表格生成后实行：data.sql
     defer-datasource-initialization: true
+  sql:
+    init:
+      mode: never
