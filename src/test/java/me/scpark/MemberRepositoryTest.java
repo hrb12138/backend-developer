@@ -5,8 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +17,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
-@Transactional
+@TestPropertySource(properties = {
+        "spring.sql.init.mode=never"
+})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
@@ -62,6 +68,7 @@ class MemberRepositoryTest {
         assertThat(member.getName()).isEqualTo("B");
 
     }
+
     @DisplayName("MemberRepository를 이름이 '박성철'인 레코드 추가하기")
     @Test
     public void saveMember(){
@@ -85,6 +92,7 @@ class MemberRepositoryTest {
     @Test
     public void deleteById3(){
         //given
+
 
 
 
@@ -117,13 +125,13 @@ class MemberRepositoryTest {
 
     @DisplayName("테이블 member name이 'A', 'B'인 레코드를 한 번에 삽입하기")
     @Test
-    public void saveMenbers() {
+    public void saveMembers() {
         // 준비 given
 
-        List<Member> menbers = List.of(new Member("A"),new Member("B"));
+        List<Member> members = List.of(new Member("A"),new Member("B"));
 
         // 실행 when
-        memberRepository.saveAll(menbers);
+        memberRepository.saveAll(members);
 
         // 검증 then
         List<Member> result = memberRepository.findAll();
